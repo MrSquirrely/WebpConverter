@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Converter.WebP.Windows.API {
+﻿namespace Converter.WebP.Windows.API {
     public class WebPConverter {
 
         public static void Convert() {

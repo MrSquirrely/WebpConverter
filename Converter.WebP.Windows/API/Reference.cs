@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -34,6 +33,11 @@ namespace Converter.WebP.Windows.API {
         internal static readonly List<string> ImageTypes = new List<string>() { ".png", ".jpeg", ".jpg", ".exif", ".tiff", ".bmp", ".gif" };
         internal static ListView ListView { get; set; }
         internal static Dispatcher MainDispatcher { get; set; }
+
+        internal static long TotalSize { get; set; } = 0;
+        internal static Label TotalSizeLabel { get; set; }
+        internal static long ConvertedSize { get; set; } = 0;
+        internal static Label ConvertedSizeLabel { get; set; }
 
         internal static Process Process = new Process() {
             StartInfo = {

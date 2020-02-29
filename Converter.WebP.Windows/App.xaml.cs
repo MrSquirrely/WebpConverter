@@ -16,10 +16,14 @@
      * along with Converter.WebP.API.  If not, see <https://www.gnu.org/licenses/>.
      */
 #endregion
+
+using System.Windows;
+
 namespace Converter.WebP.Windows {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App {
+        
     }
 }

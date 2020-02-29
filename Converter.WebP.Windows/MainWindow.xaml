@@ -8,6 +8,7 @@
 
                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                   xmlns:windows="clr-namespace:Converter.WebP.Windows"
                    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
                    Background="{DynamicResource MaterialDesignPaper}"
                    TextElement.FontWeight="Medium"
@@ -17,28 +18,62 @@
                    AllowDrop="True"
 
                    Title="WebP Converter" Height="720" Width="1280">
-    <Grid>
-        <ListView Name="ImageListView" Drop="ImageListView_OnDrop">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn
+
+    <metro:MetroWindow.RightWindowCommands>
+        <metro:WindowCommands>
+            <Label Name="TotalSizeLabel" Content="Original Size:"/>
+            <Label Name="ConvertedSizeLabel" Content="Converted Size:"/>
+            <Button Name="SettingsButton" Click="ToggleDialog">
+                <materialDesign:PackIcon Kind="Settings"/>
+            </Button>
+        </metro:WindowCommands>
+    </metro:MetroWindow.RightWindowCommands>
+
+    <materialDesign:DialogHost Name="SettingsDialog">
+        <materialDesign:DialogHost.DialogContent>
+            <Grid Height="190" Width="330">
+                <Button Name="SaveButton" Content="Save" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="80" Click="SaveButton_OnClick"/>
+                <Button Name="ResetButton" Content="Reset" HorizontalAlignment="Right" Margin="0,0,10,47" VerticalAlignment="Bottom" Width="80" Click="ResetButton_OnClick"/>
+                <Button Name="CancelButton" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,83" VerticalAlignment="Bottom" Width="80" Click="ToggleDialog"/>
+
+                <CheckBox Name="LosslessCheck" Content="Lossless" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                <CheckBox Name="NoAlphaCheck" Content="No Alpha" HorizontalAlignment="Left" Margin="93,10,0,0" VerticalAlignment="Top"/>
+
+                <Label Content="MetaData" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top"/>
+                <ComboBox Name="MetadataCombo" HorizontalAlignment="Left" Margin="75,33,0,0" VerticalAlignment="Top" Width="120" SelectedIndex="0">
+                    <ComboBoxItem Content="None"/>
+                    <ComboBoxItem Content="All"/>
+                </ComboBox>
+
+                <Label Content="WebP Compression" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top"/>
+                <TextBox Name="WebPCompressionBox" HorizontalAlignment="Left" Margin="10,91,0,0" Text="999" TextWrapping="Wrap" VerticalAlignment="Top" Width="220" PreviewTextInput="TextBox_Input" DataObject.Pasting="TextBox_Pasting"/>
+                <Label Content="WebP Animated Compression" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top"/>
+                <TextBox Name="GifCompressionBox" HorizontalAlignment="Left" Margin="10,150,0,0" Text="999" TextWrapping="Wrap" VerticalAlignment="Top" Width="220" PreviewTextInput="TextBox_Input" DataObject.Pasting="TextBox_Pasting"/>
+            </Grid>
+        </materialDesign:DialogHost.DialogContent>
+        <Grid>
+            <ListView Name="ImageListView" Drop="ImageListView_OnDrop">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn
                         DisplayMemberBinding="{Binding Name}"
                         Header="Name" />
-                    <GridViewColumn
+                        <GridViewColumn
                         DisplayMemberBinding="{Binding Type}"
                         Header="Type" />
-                    <GridViewColumn
+                        <GridViewColumn
                         DisplayMemberBinding="{Binding Size}"
                         Header="Size" />
-                    <GridViewColumn
+                        <GridViewColumn
                         DisplayMemberBinding="{Binding ConvertedSize}"
                         Header="Converted Size" />
-                    <GridViewColumn
+                        <GridViewColumn
                         DisplayMemberBinding="{Binding Location}"
                         Header="Location" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Button Name="ConvertButton" Content="Convert" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10" Click="ConvertButton_OnClick"/>
-    </Grid>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Button Name="ConvertButton" Content="Convert" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10" Click="ConvertButton_OnClick"/>
+        </Grid>
+    </materialDesign:DialogHost>
 </metro:MetroWindow>

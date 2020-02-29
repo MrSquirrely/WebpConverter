@@ -16,8 +16,9 @@
                 <!-- Material Design In Xaml Start -->
                 <materialDesign:BundledTheme BaseTheme="Light"  PrimaryColor="DeepPurple" SecondaryColor="Lime" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <!-- Replace Mahapps Font with Roboto -->
+                <!-- Replace Mahapps Font with Roboto and Flyouts -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Flyout.xaml" />
                 <!-- Material Design In Xaml End -->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -1,0 +1,21 @@
+2020.1.0-a2 :: 
+Cleaned up code to remove any unused using statments
+Removed Animated class file
+Reference.cs -
+    - Added Total Size long
+    - Added Total Size Label
+    - Added Converted Size long
+    - Added Converted Size Label
+	
+WebpConversion.cs - 
+    - added code to calculate the converted size
+    - Updated the command that gets sent to the cmd for processing
+
+MainWindow - 
+	- Added Mahapps Metro
+	- Added settings page and framework
+
+Added Settings.cs
+Added SettingsFile.cs
+Added settings.json
+Added ChangeLog file

@@ -348,3 +348,16 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+Converter.WebP.Windows/MaterialDesignThemes.MahApps.dll
+Converter.WebP.Windows/Libs/Linux/cwebp
+Converter.WebP.Windows/Libs/Linux/dwebp
+Converter.WebP.Windows/Libs/Linux/gif2webp
+Converter.WebP.Windows/Libs/Mac/cwebp
+Converter.WebP.Windows/Libs/Mac/dwebp
+Converter.WebP.Windows/Libs/Mac/gif2webp
+Converter.WebP.Windows/Libs/WindowsX64/cwebp.exe
+Converter.WebP.Windows/Libs/WindowsX64/dwebp.exe
+Converter.WebP.Windows/Libs/WindowsX64/gif2webp.exe
+Converter.WebP.Windows/Libs/WindowsX86/cwebp.exe
+Converter.WebP.Windows/Libs/WindowsX86/dwebp.exe
+Converter.WebP.Windows/Libs/WindowsX86/gif2webp.exe

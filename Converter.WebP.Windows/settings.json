@@ -3,5 +3,7 @@
   "Noalpha": false,
   "Metadata": "none",
   "WebpCompression": 80,
-  "GifCompression": 75
+  "GifCompression": 75,
+  "DeleteFile": true,
+  "BackupFile": true 
 }

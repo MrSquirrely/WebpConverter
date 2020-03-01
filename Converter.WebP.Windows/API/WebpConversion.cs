@@ -28,6 +28,7 @@ namespace Converter.WebP.Windows.API {
             };
             ConvertThread = new Thread(ConvertThreadStart);
             ConvertThread.Start();
+            Reference.StartedThreads.Add(ConvertThread);
         }
 
         /// <summary>
@@ -46,9 +47,31 @@ namespace Converter.WebP.Windows.API {
         internal void Convert() {
             Reference.StartProcess();
             Reference.Process.StandardInput.WriteLine(DroppedImage.Type.ToLower() != ".gif"
-                ? $"cwebp -mt \"{Image}\" -o \"{DroppedImage.Location}\\{DroppedImage.Name}.webp\""
-                : $"gif2webp -mt \"{Image}\"  -o \"{DroppedImage.Location}\\{DroppedImage.Name}.webp\"");
+                ? $"cwebp {CWebpOptions()} \"{Image}\" -o \"{DroppedImage.Location}\\{DroppedImage.Name}.webp\""
+                : $"gif2webp {Gif2WebpOptions()} \"{Image}\"  -o \"{DroppedImage.Location}\\{DroppedImage.Name}.webp\"");
             Reference.ExitProcess();
+            if (Settings.SettingsFile.BackupFile) {
+                BackupFile();
+            }
+            if (Settings.SettingsFile.DeleteFile) {
+                File.Delete(Image);
+            }
+        }
+
+        private string CWebpOptions() =>
+            $"-mt" +
+            $" {(Settings.SettingsFile.Lossless ? "-lossless":"")}" +
+            $" -q {Settings.SettingsFile.WebpCompression}" +
+            $" {(Settings.SettingsFile.Noalpha ? "-noalpha":"")}" +
+            $" -metadata {Settings.SettingsFile.Metadata}";
+
+        private string Gif2WebpOptions() =>
+            $"-mt" +
+            $" -q {Settings.SettingsFile.GifCompression}";
+
+        private void BackupFile() {
+            Directory.CreateDirectory($"{DroppedImage.Location}\\_backups");
+            File.Copy(Image, $"{DroppedImage.Location}\\_backups\\{DroppedImage.Name}.{DroppedImage.Type}");
         }
     }
 }

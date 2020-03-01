@@ -1,0 +1,39 @@
+2020.1.0.0 :
+Reference.cs - 
+    - Added a way to close started threads on program crash
+    
+SettingsFile.cs - 
+    - Added DeleteFile and BackupFile setting
+    
+WebpConversion.cs - 
+    - Now uses settings
+    - Added a way back and delete files based on settings
+    
+MainWindow - 
+    - Updated settings content to show the new backup and delete options
+    - Update backend as well to auto-populate said content
+    
+SettingsPageBuilder - 
+    - Added to allow editing how the content of the settings looks
+
+2020.1.0-a2 :
+Cleaned up code to remove any unused using statements
+Removed Animated class file
+Reference.cs -
+    - Added Total Size long
+    - Added Total Size Label
+    - Added Converted Size long
+    - Added Converted Size Label
+    
+WebpConversion.cs - 
+    - added code to calculate the converted size
+    - Updated the command that gets sent to the cmd for processing
+
+MainWindow - 
+    - Added Mahapps Metro
+    - Added settings page and framework
+
+Added Settings.cs
+Added SettingsFile.cs
+Added settings.json
+Added ChangeLog file

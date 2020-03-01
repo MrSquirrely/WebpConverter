@@ -17,6 +17,7 @@
      */
 #endregion
 
+using System;
 using System.Windows;
 
 namespace Converter.WebP.Windows {

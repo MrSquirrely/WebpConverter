@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -33,7 +34,7 @@ namespace Converter.WebP.Windows.API {
         internal static readonly List<string> ImageTypes = new List<string>() { ".png", ".jpeg", ".jpg", ".exif", ".tiff", ".bmp", ".gif" };
         internal static ListView ListView { get; set; }
         internal static Dispatcher MainDispatcher { get; set; }
-
+        internal static List<Thread> StartedThreads = new List<Thread>();
         internal static long TotalSize { get; set; } = 0;
         internal static Label TotalSizeLabel { get; set; }
         internal static long ConvertedSize { get; set; } = 0;
@@ -61,6 +62,17 @@ namespace Converter.WebP.Windows.API {
             Process.StandardInput.Close();
             Process.WaitForExit();
             Process.Close();
+        }
+
+        /// <summary>
+        /// We use this to try and stop any threads from continuing on a crash.
+        /// This might not work on some crashes that just kill the program.
+        /// https://docs.microsoft.com/en-us/dotnet/api/system.appdomain.unhandledexception?redirectedfrom=MSDN&amp;view=netcore-3.1
+        /// </summary>
+        internal static void ExceptionHandler(object sender, UnhandledExceptionEventArgs args) {
+            foreach (Thread startedThread in StartedThreads) {
+                startedThread.Abort();
+            }
         }
     }
 }

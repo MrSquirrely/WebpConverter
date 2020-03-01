@@ -5,7 +5,11 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>icon.ico</ApplicationIcon>
-    <Version>2020.1.0-1</Version>
+    <Version>2020.1.0</Version>
+    <Authors>Mr. Squirrely</Authors>
+    <Company>MrSquirrely.net</Company>
+    <Product>WebP Converter</Product>
+    <Description>Simple to use Image to WebP Converter.</Description>
   </PropertyGroup>
 
   <ItemGroup>

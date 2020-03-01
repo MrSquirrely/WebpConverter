@@ -5,6 +5,7 @@
         public string Metadata { get; set; }
         public float WebpCompression { get; set; }
         public float GifCompression { get; set; }
-
+        public bool DeleteFile { get; set; }
+        public bool BackupFile { get; set; }
     }
 }

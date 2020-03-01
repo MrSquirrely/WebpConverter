@@ -36,13 +36,16 @@ namespace Converter.WebP.Windows {
     /// </summary>
     public partial class MainWindow {
 
-        //Todo: add option to delete file
-        //Todo: add option to backup file
+        //Todo: create a logger
+        //Todo: Globalization
+        //Todo: Reset individual settings not just all
 
         private readonly ObservableCollection<DroppedImage> _droppedImagesCollection = Reference.ImageCollection;
+        private readonly AppDomain _domain = AppDomain.CurrentDomain;
 
         public MainWindow() {
             InitializeComponent();
+            _domain.UnhandledException += Reference.ExceptionHandler;
             Reference.ListView = ImageListView;
             ImageListView.ItemsSource = _droppedImagesCollection;
             Reference.MainDispatcher = Dispatcher.CurrentDispatcher;
@@ -96,6 +99,8 @@ namespace Converter.WebP.Windows {
         private void ToggleDialog(object sender, RoutedEventArgs e) {
             LosslessCheck.IsChecked = Settings.SettingsFile.Lossless;
             NoAlphaCheck.IsChecked = Settings.SettingsFile.Noalpha;
+            DeleteFileCheck.IsChecked = Settings.SettingsFile.DeleteFile;
+            BackupFileCheck.IsChecked = Settings.SettingsFile.BackupFile;
             MetadataCombo.SelectedIndex = Settings.SettingsFile.Metadata == "none" ? 0 : 1;
             WebPCompressionBox.Text = Settings.SettingsFile.WebpCompression.ToString(CultureInfo.InvariantCulture);
             GifCompressionBox.Text = Settings.SettingsFile.GifCompression.ToString(CultureInfo.InvariantCulture);
@@ -108,6 +113,8 @@ namespace Converter.WebP.Windows {
         private void ResetButton_OnClick(object sender, RoutedEventArgs e) {
             LosslessCheck.IsChecked = true;
             NoAlphaCheck.IsChecked = false;
+            DeleteFileCheck.IsChecked = true;
+            BackupFileCheck.IsChecked = false;
             MetadataCombo.SelectedIndex = 0;
             WebPCompressionBox.Text = "80";
             GifCompressionBox.Text = "75";
@@ -116,6 +123,8 @@ namespace Converter.WebP.Windows {
         private void SaveButton_OnClick(object sender, RoutedEventArgs e) {
             if (LosslessCheck.IsChecked != null) Settings.SettingsFile.Lossless = LosslessCheck.IsChecked.Value;
             if (NoAlphaCheck.IsChecked != null) Settings.SettingsFile.Noalpha = NoAlphaCheck.IsChecked.Value;
+            if (DeleteFileCheck.IsChecked != null) Settings.SettingsFile.DeleteFile = DeleteFileCheck.IsChecked.Value;
+            if (BackupFileCheck.IsChecked != null) Settings.SettingsFile.BackupFile = BackupFileCheck.IsChecked.Value;
             Settings.SettingsFile.Metadata = MetadataCombo.SelectedIndex == 0 ? "none" : "all";
             Settings.SettingsFile.WebpCompression = float.Parse(WebPCompressionBox.Text);
             Settings.SettingsFile.GifCompression = float.Parse(GifCompressionBox.Text);

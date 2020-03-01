@@ -31,24 +31,26 @@
 
     <materialDesign:DialogHost Name="SettingsDialog">
         <materialDesign:DialogHost.DialogContent>
-            <Grid Height="190" Width="330">
+            <Grid Height="220" Width="330" Name="SettingsGrid">
                 <Button Name="SaveButton" Content="Save" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="80" Click="SaveButton_OnClick"/>
                 <Button Name="ResetButton" Content="Reset" HorizontalAlignment="Right" Margin="0,0,10,47" VerticalAlignment="Bottom" Width="80" Click="ResetButton_OnClick"/>
                 <Button Name="CancelButton" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,83" VerticalAlignment="Bottom" Width="80" Click="ToggleDialog"/>
 
                 <CheckBox Name="LosslessCheck" Content="Lossless" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True"/>
                 <CheckBox Name="NoAlphaCheck" Content="No Alpha" HorizontalAlignment="Left" Margin="93,10,0,0" VerticalAlignment="Top"/>
+                <CheckBox Name="DeleteFileCheck" Content="Delete File" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                <CheckBox Name="BackupFileCheck" Content="Backup File" HorizontalAlignment="Left" Margin="104,33,0,0" VerticalAlignment="Top"/>
 
-                <Label Content="MetaData" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top"/>
-                <ComboBox Name="MetadataCombo" HorizontalAlignment="Left" Margin="75,33,0,0" VerticalAlignment="Top" Width="120" SelectedIndex="0">
+                <Label Content="MetaData" HorizontalAlignment="Left" Margin="10,63,0,0" VerticalAlignment="Top"/>
+                <ComboBox Name="MetadataCombo" HorizontalAlignment="Left" Margin="75,61,0,0" VerticalAlignment="Top" Width="120" SelectedIndex="0">
                     <ComboBoxItem Content="None"/>
                     <ComboBoxItem Content="All"/>
                 </ComboBox>
 
-                <Label Content="WebP Compression" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top"/>
-                <TextBox Name="WebPCompressionBox" HorizontalAlignment="Left" Margin="10,91,0,0" Text="999" TextWrapping="Wrap" VerticalAlignment="Top" Width="220" PreviewTextInput="TextBox_Input" DataObject.Pasting="TextBox_Pasting"/>
-                <Label Content="WebP Animated Compression" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top"/>
-                <TextBox Name="GifCompressionBox" HorizontalAlignment="Left" Margin="10,150,0,0" Text="999" TextWrapping="Wrap" VerticalAlignment="Top" Width="220" PreviewTextInput="TextBox_Input" DataObject.Pasting="TextBox_Pasting"/>
+                <Label Content="WebP Compression" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top"/>
+                <TextBox Name="WebPCompressionBox" HorizontalAlignment="Left" Margin="10,119,0,0" Text="999" TextWrapping="Wrap" VerticalAlignment="Top" Width="220" PreviewTextInput="TextBox_Input" DataObject.Pasting="TextBox_Pasting"/>
+                <Label Content="WebP Animated Compression" HorizontalAlignment="Left" Margin="10,154,0,0" VerticalAlignment="Top"/>
+                <TextBox Name="GifCompressionBox" HorizontalAlignment="Left" Margin="10,178,0,0" Text="999" TextWrapping="Wrap" VerticalAlignment="Top" Width="220" PreviewTextInput="TextBox_Input" DataObject.Pasting="TextBox_Pasting"/>
             </Grid>
         </materialDesign:DialogHost.DialogContent>
         <Grid>

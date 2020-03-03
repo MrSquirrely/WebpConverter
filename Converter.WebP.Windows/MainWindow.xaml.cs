@@ -17,15 +17,11 @@
      */
 #endregion
 using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Threading;
 using Converter.WebP.Windows.API;
+using Microsoft.Win32;
 using Squirrel_Sizer;
 using Path = System.IO.Path;
 
@@ -38,50 +34,29 @@ namespace Converter.WebP.Windows {
 
         //Todo: create a logger
         //Todo: Globalization
-        //Todo: Reset individual settings not just all
 
-        private readonly ObservableCollection<DroppedImage> _droppedImagesCollection = Reference.ImageCollection;
         private readonly AppDomain _domain = AppDomain.CurrentDomain;
 
         public MainWindow() {
             InitializeComponent();
             _domain.UnhandledException += Reference.ExceptionHandler;
             Reference.ListView = ImageListView;
-            ImageListView.ItemsSource = _droppedImagesCollection;
+            ImageListView.ItemsSource = Reference.ImageCollection;
             Reference.MainDispatcher = Dispatcher.CurrentDispatcher;
             Reference.TotalSizeLabel = TotalSizeLabel;
             Reference.ConvertedSizeLabel = ConvertedSizeLabel;
             Settings.LoadSettings();
-            
-            //Debug.WriteLine($"\n ########## \n Platform: {Reference.CurrentPlatformId} \n ########## \n");
-            //switch (Reference.CurrentPlatformId) {
-            //    case PlatformID.Win32S:
-            //    case PlatformID.Win32Windows:
-            //    case PlatformID.WinCE:
-            //    case PlatformID.Xbox:
-            //        break;
-            //    case PlatformID.Unix:
-            //        break;
-            //    case PlatformID.MacOSX:
-            //        break;
-            //    case PlatformID.Win32NT:
-            //        Debug.WriteLine($"\n ########## \n Is64: {Environment.Is64BitOperatingSystem} \n ########## \n Processors: {Environment.ProcessorCount} \n ########## \n");
-            //        break;
-            //    default:
-            //        throw new ArgumentOutOfRangeException();
-            //}
         }
 
         private void ImageListView_OnDrop(object sender, DragEventArgs e) {
             if (e.Data == null) return;
-            _droppedImagesCollection.Clear();
+            Reference.ImageCollection.Clear();
             string[] dataStrings = (string[]) e.Data.GetData(DataFormats.FileDrop);
             if (dataStrings == null) return;
             foreach (string dataString in dataStrings) {
                 FileInfo info = new FileInfo(dataString);
                 if (!Reference.ImageTypes.Contains(info.Extension.ToLower())) continue;
-                Debug.WriteLine($"Adding {info.Name}");
-                _droppedImagesCollection.Add(new DroppedImage() {
+                Reference.ImageCollection.Add(new DroppedImage() {
                     Name = Path.GetFileNameWithoutExtension(dataString),
                     Type = info.Extension,
                     Size = Sizer.SizeSuffix(info.Length),
@@ -97,39 +72,59 @@ namespace Converter.WebP.Windows {
         private void ConvertButton_OnClick(object sender, RoutedEventArgs e) => WebPConverter.Convert();
 
         private void ToggleDialog(object sender, RoutedEventArgs e) {
-            LosslessCheck.IsChecked = Settings.SettingsFile.Lossless;
-            NoAlphaCheck.IsChecked = Settings.SettingsFile.Noalpha;
-            DeleteFileCheck.IsChecked = Settings.SettingsFile.DeleteFile;
-            BackupFileCheck.IsChecked = Settings.SettingsFile.BackupFile;
-            MetadataCombo.SelectedIndex = Settings.SettingsFile.Metadata == "none" ? 0 : 1;
-            WebPCompressionBox.Text = Settings.SettingsFile.WebpCompression.ToString(CultureInfo.InvariantCulture);
-            GifCompressionBox.Text = Settings.SettingsFile.GifCompression.ToString(CultureInfo.InvariantCulture);
-            SettingsDialog.IsOpen = !SettingsDialog.IsOpen;
+            if (!SettingsDialog.IsOpen) {
+                DialogContentHolder.Children.Clear();
+                DialogContentHolder.Children.Add(new Views.SettingsView());
+                SettingsDialog.IsOpen = true;
+            }
+            else {
+                SettingsDialog.IsOpen = false;
+            }
+        }
+        
+        private void ClearSelectedImage(object sender, RoutedEventArgs e) {
+            DroppedImage selectedImage = (DroppedImage)ImageListView.SelectedItem;
+            DroppedImage removeDroppedImage = null;
+            foreach (DroppedImage droppedImage in Reference.ImageCollection) {
+                if (selectedImage.ImageGuid == droppedImage.ImageGuid) {
+                    removeDroppedImage = droppedImage;
+                }
+            }
+
+            if (removeDroppedImage == null) return;
+            Reference.ImageCollection.Remove(removeDroppedImage);
+            ImageListView.Items.Refresh();
         }
 
-        private void TextBox_Input(object sender, TextCompositionEventArgs e) => e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);
-        private void TextBox_Pasting(object sender, DataObjectPastingEventArgs e) => e.CancelCommand();
-
-        private void ResetButton_OnClick(object sender, RoutedEventArgs e) {
-            LosslessCheck.IsChecked = true;
-            NoAlphaCheck.IsChecked = false;
-            DeleteFileCheck.IsChecked = true;
-            BackupFileCheck.IsChecked = false;
-            MetadataCombo.SelectedIndex = 0;
-            WebPCompressionBox.Text = "80";
-            GifCompressionBox.Text = "75";
+        private void ClearAllImages(object sender, RoutedEventArgs e) {
+            Reference.ImageCollection.Clear();
+            ImageListView.Items.Refresh();
         }
 
-        private void SaveButton_OnClick(object sender, RoutedEventArgs e) {
-            if (LosslessCheck.IsChecked != null) Settings.SettingsFile.Lossless = LosslessCheck.IsChecked.Value;
-            if (NoAlphaCheck.IsChecked != null) Settings.SettingsFile.Noalpha = NoAlphaCheck.IsChecked.Value;
-            if (DeleteFileCheck.IsChecked != null) Settings.SettingsFile.DeleteFile = DeleteFileCheck.IsChecked.Value;
-            if (BackupFileCheck.IsChecked != null) Settings.SettingsFile.BackupFile = BackupFileCheck.IsChecked.Value;
-            Settings.SettingsFile.Metadata = MetadataCombo.SelectedIndex == 0 ? "none" : "all";
-            Settings.SettingsFile.WebpCompression = float.Parse(WebPCompressionBox.Text);
-            Settings.SettingsFile.GifCompression = float.Parse(GifCompressionBox.Text);
-            Settings.SaveSettings();
-            SettingsDialog.IsOpen = !SettingsDialog.IsOpen;
+        private void MenuFileOpen_OnClick(object sender, RoutedEventArgs e) {
+            OpenFileDialog openFile = new OpenFileDialog() {
+                Multiselect = true,
+                Filter = "Images |*.png;*.jpeg;*.jpg;*.exif;*.tiff;*.bmp;*.gif",
+                InitialDirectory = Environment.CurrentDirectory
+            };
+            bool? result = openFile.ShowDialog();
+            if (result != true) return;
+            foreach (string openFileFileName in openFile.FileNames) {
+                FileInfo info = new FileInfo(openFileFileName);
+                if (!Reference.ImageTypes.Contains(info.Extension.ToLower())) continue;
+                Reference.ImageCollection.Add(new DroppedImage() {
+                    Name = Path.GetFileNameWithoutExtension(openFileFileName),
+                    Type = info.Extension,
+                    Size = Sizer.SizeSuffix(info.Length),
+                    Location = info.DirectoryName,
+                    ConvertedSize = Sizer.Zero,
+                    ImageGuid = Guid.NewGuid()
+                });
+                Reference.TotalSize += info.Length;
+                Reference.TotalSizeLabel.Content = $"Original Size: {Sizer.SizeSuffix(Reference.TotalSize)}";
+            }
         }
+
+        private void MenuFileExit_OnClick(object sender, RoutedEventArgs e) => Environment.Exit(0);
     }
 }

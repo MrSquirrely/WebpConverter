@@ -24,6 +24,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using MaterialDesignThemes.Wpf;
 
 namespace Converter.WebP.Windows.API {
     public class Reference {
@@ -39,7 +40,7 @@ namespace Converter.WebP.Windows.API {
         internal static Label TotalSizeLabel { get; set; }
         internal static long ConvertedSize { get; set; } = 0;
         internal static Label ConvertedSizeLabel { get; set; }
-
+        
         internal static Process Process = new Process() {
             StartInfo = {
                 FileName = "cmd.exe",

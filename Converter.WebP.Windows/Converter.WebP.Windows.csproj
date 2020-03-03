@@ -27,6 +27,30 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Lang\en_us.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>en_us.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Lang\lang.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>lang.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Lang\en_us.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>en_us.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Lang\lang.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>lang.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Libs\Linux\cwebp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

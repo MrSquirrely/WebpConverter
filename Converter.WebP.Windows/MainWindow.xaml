@@ -8,7 +8,7 @@
 
                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-                   xmlns:windows="clr-namespace:Converter.WebP.Windows"
+                   xmlns:lang="clr-namespace:Converter.WebP.Windows.Lang"
                    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
                    Background="{DynamicResource MaterialDesignPaper}"
                    TextElement.FontWeight="Medium"
@@ -17,12 +17,12 @@
 
                    AllowDrop="True"
 
-                   Title="WebP Converter" Height="720" Width="1280">
+                   Title="{x:Static lang:lang.Title}" Height="720" Width="1280">
 
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands>
-            <Label Name="TotalSizeLabel" Content="Original Size:"/>
-            <Label Name="ConvertedSizeLabel" Content="Converted Size:"/>
+            <Label Name="TotalSizeLabel" Content="{x:Static lang:lang.OriginalSizeLabel}"/>
+            <Label Name="ConvertedSizeLabel" Content="{x:Static lang:lang.ConvertedSizeLabel}"/>
             <Button Name="SettingsButton" Click="ToggleDialog">
                 <materialDesign:PackIcon Kind="Settings"/>
             </Button>
@@ -31,51 +31,45 @@
 
     <materialDesign:DialogHost Name="SettingsDialog">
         <materialDesign:DialogHost.DialogContent>
-            <Grid Height="220" Width="330" Name="SettingsGrid">
-                <Button Name="SaveButton" Content="Save" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="80" Click="SaveButton_OnClick"/>
-                <Button Name="ResetButton" Content="Reset" HorizontalAlignment="Right" Margin="0,0,10,47" VerticalAlignment="Bottom" Width="80" Click="ResetButton_OnClick"/>
-                <Button Name="CancelButton" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,83" VerticalAlignment="Bottom" Width="80" Click="ToggleDialog"/>
-
-                <CheckBox Name="LosslessCheck" Content="Lossless" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True"/>
-                <CheckBox Name="NoAlphaCheck" Content="No Alpha" HorizontalAlignment="Left" Margin="93,10,0,0" VerticalAlignment="Top"/>
-                <CheckBox Name="DeleteFileCheck" Content="Delete File" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" IsChecked="True"/>
-                <CheckBox Name="BackupFileCheck" Content="Backup File" HorizontalAlignment="Left" Margin="104,33,0,0" VerticalAlignment="Top"/>
-
-                <Label Content="MetaData" HorizontalAlignment="Left" Margin="10,63,0,0" VerticalAlignment="Top"/>
-                <ComboBox Name="MetadataCombo" HorizontalAlignment="Left" Margin="75,61,0,0" VerticalAlignment="Top" Width="120" SelectedIndex="0">
-                    <ComboBoxItem Content="None"/>
-                    <ComboBoxItem Content="All"/>
-                </ComboBox>
-
-                <Label Content="WebP Compression" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top"/>
-                <TextBox Name="WebPCompressionBox" HorizontalAlignment="Left" Margin="10,119,0,0" Text="999" TextWrapping="Wrap" VerticalAlignment="Top" Width="220" PreviewTextInput="TextBox_Input" DataObject.Pasting="TextBox_Pasting"/>
-                <Label Content="WebP Animated Compression" HorizontalAlignment="Left" Margin="10,154,0,0" VerticalAlignment="Top"/>
-                <TextBox Name="GifCompressionBox" HorizontalAlignment="Left" Margin="10,178,0,0" Text="999" TextWrapping="Wrap" VerticalAlignment="Top" Width="220" PreviewTextInput="TextBox_Input" DataObject.Pasting="TextBox_Pasting"/>
-            </Grid>
+            <Grid Name="DialogContentHolder"/>
         </materialDesign:DialogHost.DialogContent>
         <Grid>
-            <ListView Name="ImageListView" Drop="ImageListView_OnDrop">
+            <Menu VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                <MenuItem Header="{x:Static lang:lang.FileMenu}">
+                    <MenuItem Name="MenuFileOpen" Header="{x:Static lang:lang.OpenMenu}" Click="MenuFileOpen_OnClick"/>
+                    <MenuItem Name="MenuFileClearSelected" Header="{x:Static lang:lang.ClearMenu}" Click="ClearSelectedImage"/>
+                    <MenuItem Name="MenuFileClearAll" Header="{x:Static lang:lang.ClearAllMenu}" Click="ClearAllImages"/>
+                    <MenuItem Name="MenuFileExit" Header="{x:Static lang:lang.ExitMenu}" Click="MenuFileExit_OnClick"/>
+                </MenuItem>
+            </Menu>
+            <ListView Name="ImageListView" Drop="ImageListView_OnDrop" Margin="0,48,0,0">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn
                         DisplayMemberBinding="{Binding Name}"
-                        Header="Name" />
+                        Header="{x:Static lang:lang.NameHeader}" />
                         <GridViewColumn
                         DisplayMemberBinding="{Binding Type}"
-                        Header="Type" />
+                        Header="{x:Static lang:lang.TypeHeader}" />
                         <GridViewColumn
                         DisplayMemberBinding="{Binding Size}"
-                        Header="Size" />
+                        Header="{x:Static lang:lang.SizeHeader}" />
                         <GridViewColumn
                         DisplayMemberBinding="{Binding ConvertedSize}"
-                        Header="Converted Size" />
+                        Header="{x:Static lang:lang.ConvertedSizeHeader}" />
                         <GridViewColumn
                         DisplayMemberBinding="{Binding Location}"
-                        Header="Location" />
+                        Header="{x:Static lang:lang.LocationHeader}" />
                     </GridView>
                 </ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Name="ContextClear" Header="{x:Static lang:lang.ClearContext}" Click="ClearSelectedImage"/>
+                        <MenuItem Name="ContextClearAll"  Header="{x:Static lang:lang.ClearAllContext}" Click="ClearAllImages"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
             </ListView>
-            <Button Name="ConvertButton" Content="Convert" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10" Click="ConvertButton_OnClick"/>
+            <Button Name="ConvertButton" Content="{x:Static lang:lang.ConvertButton}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10" Click="ConvertButton_OnClick"/>
         </Grid>
     </materialDesign:DialogHost>
 </metro:MetroWindow>
